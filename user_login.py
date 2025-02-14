@@ -1,42 +1,41 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import os
 import time
 
-def login_hudl():
-    # Set up the WebDriver (Make sure you have chromedriver installed)
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  # Run in headless mode if using in GitHub Actions
-    driver = webdriver.Chrome(options=options)
-    
+# Set up the WebDriver (ensure you have the correct driver installed, e.g., chromedriver for Chrome)
+driver = webdriver.Chrome()
+
+def test_login_button():
     try:
-        driver.get("https://www.hudl.com/login")
-        time.sleep(2)  # Wait for the page to load
-        
-        # Find and fill in the username field
-        email_input = driver.find_element(By.ID, "email")
-        email_input.send_keys(os.getenv("HUDL_EMAIL"))
-        
-        # Find and fill in the password field
-        password_input = driver.find_element(By.ID, "password")
-        password_input.send_keys(os.getenv("HUDL_PASSWORD"))
-        
-        # Submit the login form
-        password_input.send_keys(Keys.RETURN)
-        time.sleep(5)  # Wait for login to process
-        
-        # Verify login success
-        if "dashboard" in driver.current_url:
-            print("Login successful!")
-        else:
-            print("Login failed!")
-    
+        # Open the Hudl website
+        driver.get("https://www.hudl.com/en_gb/")
+        driver.maximize_window()
+
+        # Wait for the page to load
+        time.sleep(3)  # Consider using WebDriverWait instead
+
+        # Find the login button and click it and open the dropdown menu
+        login_button = driver.find_element(By.LINK_TEXT, "Log in")
+        login_button.click()
+        time.sleep(3)
+
+        # Find the dropdown menu and click "Hudl"
+        hudl_dropdown = driver.find_element(By.ID, "login-Hudl")  # Replace with actual ID or locator
+        login-Hudl.click()
+
+        # Wait for navigation
+        time.sleep(3)  # Adjust based on actual navigation speed
+
+        # Verify if redirected to the login page
+        assert "login" in driver.current_url, "Login button did not navigate correctly"
+        print("Test Passed: Login button clicked successfully.")
+
     except Exception as e:
-        print(f"An error occurred: {e}")
-    
+        print(f"Test Failed: {e}")
     finally:
+        # Close the browser
         driver.quit()
 
-if __name__ == "__main__":
-    login_hudl()
+# Run the test
+test_login_button()
