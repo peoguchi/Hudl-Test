@@ -2,78 +2,81 @@
  Repository for test automation
 This file contains details of the test script that will be run.
 
-# Prerequisites
-- Install Selenium and Pytest
-- Download the WebDriver (e.g., ChromeDriver for Google Chrome) and add it to your system PATH.
-Replace "your_email@example.com" and "your_password" with valid credentials.
-Automation Test Script (HudlLoginTest.py)
-python
-Copy
-Edit
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-import pytest
-import time
 
-# Test Data
-BASE_URL = "https://www.hudl.com/login"
-VALID_EMAIL = "your_email@example.com"
-VALID_PASSWORD = "your_password"
-INVALID_EMAIL = "invalid_email@example.com"
-INVALID_PASSWORD = "wrongpassword"
+# Approach to Testing the Hudl.com Login Page
+The test script follows a structured automation testing approach using Selenium WebDriver and Pytest. The goal is to validate the login functionality under different scenarios to ensure the system behaves as expected.
 
-@pytest.fixture
-def driver():
-    # Initialize WebDriver
-    driver = webdriver.Chrome()  # Ensure ChromeDriver is installed
-    driver.maximize_window()
-    yield driver
-    driver.quit()
 
-def test_valid_login(driver):
-    """Test case for valid login"""
-    driver.get(BASE_URL)
-    
-    # Locate elements
-    email_input = driver.find_element(By.ID, "email")
-    password_input = driver.find_element(By.ID, "password")
-    login_button = driver.find_element(By.ID, "logIn")
-    
-    # Perform login
-    email_input.send_keys(VALID_EMAIL)
-    password_input.send_keys(VALID_PASSWORD)
-    login_button.click()
-    
-    time.sleep(3)  # Wait for page load
-    
-    # Validate successful login by checking redirected URL or dashboard element
-    assert "https://www.hudl.com/home" in driver.current_url, "Login failed!"
+# Testing Strategy
+The script implements a data-driven testing approach where different sets of credentials (valid and invalid) are used to verify login behavior. It uses UI-based functional testing to interact with the login page.
 
-def test_invalid_login(driver):
-    """Test case for invalid login"""
-    driver.get(BASE_URL)
-    
-    # Locate elements
-    email_input = driver.find_element(By.ID, "email")
-    password_input = driver.find_element(By.ID, "password")
-    login_button = driver.find_element(By.ID, "logIn")
-    
-    # Perform login
-    email_input.send_keys(INVALID_EMAIL)
-    password_input.send_keys(INVALID_PASSWORD)
-    login_button.click()
-    
-    time.sleep(2)  # Wait for error message
-    
-    # Check for an error message
-    error_message = driver.find_element(By.XPATH, "//p[contains(text(), 'We didn’t recognize that email and/or password.')]")
-    assert error_message.is_displayed(), "Error message not displayed!"
 
-if __name__ == "__main__":
-    pytest.main(["-v", "HudlLoginTest.py"])
-Test Cases Covered
+# Test Script Structure
+Setup and Teardown using Pytest Fixtures
+- A driver() fixture is used to initialize the Chrome WebDriver before each test and close it after execution.
+- This ensures proper resource management.
+
+
+# Test scenarios
 Valid Login: Ensures the user can log in with correct credentials.
 Invalid Login: Ensures an error message appears for incorrect credentials.
-How to Run the Test
-Save the script as HudlLoginTest.py
+Reset password: Ensures user is able to successfully reset their password and login with their new credentials.
+Reset password failure: Ensures if user enters incorrect credentials, password reset fails correctly.
+Reset password failure: Ensures user cannot set new password with incorrect password failure.  
+Reset password failure: Ensures user successfully resets their passwordd and is unable to login with old credentials.
+
+
+# Key Considerations
+- Why Selenium?
+	Selenium allows direct interaction with the web elements.
+	It provides cross-browser support.
+	Supports automation of real user flows.
+- Why Pytest?
+	Pytest provides a simple test structure.
+	Supports fixtures for setup and teardown.
+	Allows for parameterized testing (if needed in the future).
+- Handling Dynamic Elements
+	time.sleep() is used for simplicity, but explicit waits (WebDriverWait) can be used for dynamic elemen 
+
+
+# Feature Enhancements
+- Implement explicit waits instead of time.sleep().
+- Use data-driven testing (via CSV, Excel, or Pytest parameters) for multiple test cases.
+- Extend tests to validate:
+	Login with a locked account.
+	Browser compatibility.
+- Logout test to ensure user is properly logged out and cannot access the dashboard after logging out
+- Logging in to multiple devices to verify how the user's current session is affected and handled.
+- SQL injections to ensure input fields are protected against malicious input.
+
+
+# Reporting and logging
+- Generate Detailed Test Reports using Pytest HTML Reports.
+Integrate with Allure Reports for detailed logs and screenshots.
+
+
+# Risks
+- Functional Risks	
+	UI element changes: If Hudl updates the login page (e.g., changing the ID or XPath of input fields or buttons), the test may fail due to element not found errors.
+- Mitigation: 
+Use robust locators (like By.NAME or By.CSS_SELECTOR) and implement explicit waits to handle dynamic elements.
+
+- Rate Limiting or Account Locking:
+	Multiple invalid login attempts may lock the account, preventing further tests.
+- Mitigation: Use a dummy test account and avoid excessive invalid login attempts in a short period.
+
+- Performance Risks
+	Slow page load or network issues causing the login page to load slowly, leading to timeout errors.
+- Mitigation: Use explicit waits (WebDriverWait) instead of time.sleep() to handle dynamic elements.
+
+Security Risks:
+- Exposing private data in the code by storing plain text credentials in the script.
+- Mitigation: use environment variables or secure vaults, AWS, which hashs out sensitive data.
+
+Test Maintainability Risks:
+- Hardcoded data makes the test difficult to maintain.
+- Mitigation: Use configuration files oor parameterised to manage test data
+
+
+Addressing these risks and integrating these considerations ensures that the Hudl.com login automation test remains robust, reliable, scalable and maintainable.
+
