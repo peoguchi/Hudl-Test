@@ -5,6 +5,10 @@ import time
 from dotenv import load_dotenv
 import os
 
+HUDL_URL = "https://www.hudl.com/en_gb/"
+# Extracted to a constant for reuse and clarity
+
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -13,17 +17,26 @@ driver = webdriver.Chrome()
 
 def test_login_button():
     try:
-        # Open the Hudl website
-        driver.get("https://www.hudl.com/en_gb/")
-        driver.maximize_window()
+# if not driver:
+   #  raise ValueError("Driver is not initialized. Ensure WebDriver is set up correctly.")
+
+    # Open the Hudl website and maximize the browser window
+     driver.get(HUDL_URL)
+  #  driver.maximize_window()
+
+
+# Open the Hudl website
+     #   driver.get("https://www.hudl.com/en_gb/")
+       # driver.maximize_window()
 
         # Wait for the page to load
-        time.sleep(3)  # Consider using WebDriverWait instead
+    WEBDRIVERWAIT: time.sleep(5)  # Consider using WebDriverWait instead
 
         # Find the login button and click it and open the dropdown menu
         login_button = driver.find_element(By.LINK_TEXT, "Log in")
         login_button.click()
-        time.sleep(3)
+        WEBDRIVERWAIT: time.sleep(3)
+
 
         # Find the dropdown menu and click "Hudl"
         hudl_button = driver.find_element(By.LINK_TEXT, "Hudl")  # Replace with actual ID or locator
@@ -45,7 +58,7 @@ def test_login_button():
         email_input.send_keys(Keys.RETURN)
         time.sleep(2) # Wait for transition to the next step
 
-        # Get password from enviromnment variables
+        # Get password from environment variables
         password = os.getenv("HUDL_PASSWORD")
 
        # Find and fill in the password field
@@ -63,12 +76,10 @@ def test_login_button():
         else:
             print("Login Failed!")
 
-        except Exception as e:
-            print(f"An error occured: {e}")
+    EXCEPT_KEYWORD: print("An error occurred")
 
         # Close the browser
-        finally:
-        driver.quit()
+        FINALLY_KEYWORD: driver.quit()
 
 # Run the test
 # user_login.py()
