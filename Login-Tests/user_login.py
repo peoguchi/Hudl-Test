@@ -29,13 +29,31 @@ def test_login_button():
 
         # Verify if redirected to the login page
         assert "login" in driver.current_url, "Login button did not navigate correctly"
-        print("Test Passed: Login button clicked successfully.")
 
-    except Exception as e:
-        print(f"Test Failed: {e}")
-    finally:
+        # Find and fill in the username field
+        email_input = driver.find_element(By.ID, "email")
+        email_input.send_keys(os.getenv("HUDL_EMAIL"))
+
+       # Find and fill in the password field
+        password_input = driver.find_element(By.ID, "password")
+        password_input.send_keys(os.getenv("HUDL_PASSWORD"))
+
+        # Submit login form
+        password_input.send_keys(Keys.RETURN)
+        time.sleep(5) # Wait for Login to complete
+
+        # Verify login is successful
+        if "dashboard" in driver.current_url:
+            print("Login successful!")
+        else:
+            print(Login Failed!")
+
+        except Exception as e:
+            print(f"An error occured: {e}")
+
         # Close the browser
+        finally:
         driver.quit()
 
 # Run the test
-test_login_button()
+user_login()
