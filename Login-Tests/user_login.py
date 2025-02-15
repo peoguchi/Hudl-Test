@@ -38,7 +38,7 @@ def test_login_button():
         email = os.getenv("HUDL_EMAIL")
         
         # Find and fill in the email field
-        email_input = driver.find_element(By.ID, "email")
+        email_input = driver.find_element(By.ID, "username")
         email_input.send_keys(email)
         # email_input.send_keys(os.getenv("HUDL_EMAIL"))
         email_input.send_keys(Keys.RETURN)
