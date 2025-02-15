@@ -45,22 +45,29 @@ def test_login_button():
         time.sleep(2) # Wait for transition to the next step
 
         # Get password from enviromnment variables
-        password = os.getenv("HUDL_PASSWORD")
+        password = os.getenv("HUDL_WRONG_PASSWORD")
 
        # Find and fill in the password field
         password_input = driver.find_element(By.ID, "password")
-        # password_input.send_keys(os.getenv("HUDL_PASSWORD"))
+        # password_input.send_keys(os.getenv("HUDL_WRONG_PASSWORD"))
         password_input.send_keys(password)
 
         # Submit login form
         password_input.send_keys(Keys.RETURN)
         time.sleep(5) # Wait for Login to complete
 
-        # Verify login is successful
+        # Verify password validation error is shown
+        error_message - driver.find_element(By.CLASS_NAME, "ulp-input-error-message").text
+        if "email or password is incorrect" in error_message:
+            print("Login failed: Incorrect email or password. Test Successful.")
+                  else:
+                  print("Unknown login error. Please check test manually to verify:", error_message)
+                except NoSuchElementException:
+                # If no error message is found, assume test failed
         if "dashboard" in driver.current_url:
-            print("Login successful!")
+            print("Test Failed! Login Successful.")
         else:
-            print(Login Failed!")
+            print("Login failed, but no error message found. Please check test manually to verify")                     
 
         except Exception as e:
             print(f"An error occured: {e}")
