@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+from dotenv import load_dotenv
 import os
 
 # Load environment variables from .env file
@@ -60,7 +61,7 @@ def test_login_button():
         if "dashboard" in driver.current_url:
             print("Login successful!")
         else:
-            print(Login Failed!")
+            print("Login Failed!")
 
         except Exception as e:
             print(f"An error occured: {e}")
@@ -70,4 +71,4 @@ def test_login_button():
         driver.quit()
 
 # Run the test
-user_login()
+# user_login.py()
