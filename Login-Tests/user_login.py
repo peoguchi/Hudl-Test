@@ -2,6 +2,10 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Set up the WebDriver (ensure you have the correct driver installed, e.g., chromedriver for Chrome)
 driver = webdriver.Chrome()
@@ -30,15 +34,23 @@ def test_login_button():
         # Verify if redirected to the login page
         # assert "login" in driver.current_url, "Login button did not navigate correctly"
 
-        # Find and fill in the username field
+        # Get email from enviromnment variables
+        email = os.getenv("HUDL_EMAIL")
+        
+        # Find and fill in the email field
         email_input = driver.find_element(By.ID, "email")
-        email_input.send_keys(os.getenv("HUDL_EMAIL"))
+        email_input.send_keys(email)
+        # email_input.send_keys(os.getenv("HUDL_EMAIL"))
         email_input.send_keys(Keys.RETURN)
         time.sleep(2) # Wait for transition to the next step
 
+        # Get password from enviromnment variables
+        password = os.getenv("HUDL_PASSWORD")
+
        # Find and fill in the password field
         password_input = driver.find_element(By.ID, "password")
-        password_input.send_keys(os.getenv("HUDL_PASSWORD"))
+        # password_input.send_keys(os.getenv("HUDL_PASSWORD"))
+        password_input.send_keys(password)
 
         # Submit login form
         password_input.send_keys(Keys.RETURN)
