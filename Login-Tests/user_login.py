@@ -21,8 +21,8 @@ def test_login_button():
         time.sleep(3)
 
         # Find the dropdown menu and click "Hudl"
-        hudl_dropdown = driver.find_element(By.ID, "login-Hudl")  # Replace with actual ID or locator
-        login-Hudl.click()
+        hudl_button = driver.find_element(By.LINK_TEXT, "Hudl")  # Replace with actual ID or locator
+        hudl_button.click()
 
         # Wait for navigation
         time.sleep(3)  # Adjust based on actual navigation speed
