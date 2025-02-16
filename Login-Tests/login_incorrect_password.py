@@ -16,6 +16,16 @@ HUDL_URL = "https://www.hudl.com/en_gb/"
 # Load environment variables from .env file
 load_dotenv()
 
+# Ensure HUDL_PASSWORD_2 is retrieved correctly
+password2 = os.getenv("HUDL_PASSWORD_2")
+
+# Debugging - Check if password2 is retrieved correctly
+if not password2:
+    raise ValueError("ERROR: HUDL_PASSWORD_2 is missing or not loading from .env file!")
+
+print(f"Debug: Retrieved password2 = {'*' * len(password2)}")  # Masked output
+
+
 # Set up the WebDriver (ensure you have the correct driver installed, e.g., chromedriver for Chrome)
 @pytest.fixture
 def driver():
@@ -62,20 +72,16 @@ def test_login_button(driver):
         email_input.send_keys(Keys.RETURN)
         time.sleep(2)  # Wait for transition to the next step
 
-        # Get password from environment variables
-        password = os.getenv("HUDL_PASSWORD_2")
-        if not password:
-            raise ValueError("ERROR: HUDL_PASSWORD_2 is missing in .env file!")
-
-        print(f"Retrieved password: {'*' * len(password)}")
+        # Locate the Password field
+        password2_input = driver.find_element(By.ID, "password")
 
         # Enter incorrect password
-        password_input = driver.find_element(By.ID, "password")
-        password_input.send_keys(password)  # Uses "HUDL_PASSWORD_2" from .env
+        password2_input.clear()  # Clear the field first (optional but recommended)
+        password2_input.send_keys(password2)  # Uses "HUDL_PASSWORD_2" from .env
         print("Entered password (masked)")
 
-        # Submit login form
-        password_input.send_keys(Keys.RETURN)
+        # Submit form
+        password2_input.send_keys(Keys.RETURN)
         time.sleep(5)  # Wait for login to complete
 
         # Verify password validation error is shown
