@@ -55,8 +55,9 @@ def test_login_button(driver):
 
         # Get email from environment variables
         email = os.getenv("HUDL_EMAIL")
-        if not email:
-            raise ValueError("HUDL_EMAIL is not set in the environment variables.")
+        print(f"Email: {email}")
+        # if not email:
+           # raise ValueError("HUDL_EMAIL is not set in the environment variables.")
 
         # Find and fill in the email field
         email_input = driver.find_element(By.ID, "username")
@@ -67,8 +68,9 @@ def test_login_button(driver):
 
         # Get password from environment variables
         password = os.getenv("HUDL_PASSWORD")
-        if not password:
-            raise ValueError("HUDL_PASSWORD is not set in the environment variables.")
+        print(f"Password: {password}")
+        # if not password:
+           # raise ValueError("HUDL_PASSWORD is not set in the environment variables.")
 
         # Find and fill in the password field
         password_input = driver.find_element(By.ID, "password")
