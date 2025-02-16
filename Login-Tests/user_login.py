@@ -71,7 +71,6 @@ def test_login_button(driver):
         # Find and fill in the password field
         password_input = driver.find_element(By.ID, "password")
         password_input.send_keys(password)
-        print("Enter password")
 
         # Submit login form
         password_input.send_keys(Keys.RETURN)
