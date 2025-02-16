@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pytest
@@ -63,12 +64,26 @@ def test_login_button(driver):
 
         # Get password from environment variables
         password2 = os.getenv("HUDL_PASSWORD_2")
-        print("Password entered successfully.")  # Do NOT print password
+        if not password2:
+            raise ValueError("ERROR: HUDL_PASSWORD_2 is missing in .env file!")
 
-        # Find and fill in the password field
+        print(f"Retrieved password2: {'*' * len(password2)}")
+
+        # Enter incorrect password
         password2_input = driver.find_element(By.ID, "password")
+        password2_input.send_keys(password2)  # Uses "HUDL_PASSWORD_2" from .env
+        print("Entered password (masked)")
+
+        # if password2:
+            # print(f"Loaded password2: {'*' * len(password2)} (length: {len(password2)})")
+        # else:
+           # print("HUDL_PASSWORD_2 is not set or is None.")
+        # print("Password2 entered successfully.")  # Do NOT print password
+
+        # Find and fill in the password field with incorrect password
+        password2_input: WebElement = driver.find_element(By.ID, "password")
+        print("Enter password2")
         password2_input.send_keys(password2)
-        print("Enter password")
 
         # Submit login form
         password2_input.send_keys(Keys.RETURN)
