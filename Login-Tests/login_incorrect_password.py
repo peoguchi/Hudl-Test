@@ -63,30 +63,19 @@ def test_login_button(driver):
         time.sleep(2)  # Wait for transition to the next step
 
         # Get password from environment variables
-        password2 = os.getenv("HUDL_PASSWORD_2")
-        if not password2:
+        password = os.getenv("HUDL_PASSWORD_2")
+        if not password:
             raise ValueError("ERROR: HUDL_PASSWORD_2 is missing in .env file!")
 
-        print(f"Retrieved password2: {'*' * len(password2)}")
+        print(f"Retrieved password: {'*' * len(password)}")
 
         # Enter incorrect password
-        password2_input = driver.find_element(By.ID, "password")
-        password2_input.send_keys(password2)  # Uses "HUDL_PASSWORD_2" from .env
+        password_input = driver.find_element(By.ID, "password")
+        password_input.send_keys(password)  # Uses "HUDL_PASSWORD_2" from .env
         print("Entered password (masked)")
 
-        # if password2:
-            # print(f"Loaded password2: {'*' * len(password2)} (length: {len(password2)})")
-        # else:
-           # print("HUDL_PASSWORD_2 is not set or is None.")
-        # print("Password2 entered successfully.")  # Do NOT print password
-
-        # Find and fill in the password field with incorrect password
-        password2_input: WebElement = driver.find_element(By.ID, "password")
-        print("Enter password2")
-        password2_input.send_keys(password2)
-
         # Submit login form
-        password2_input.send_keys(Keys.RETURN)
+        password_input.send_keys(Keys.RETURN)
         time.sleep(5)  # Wait for login to complete
 
         # Verify password validation error is shown
