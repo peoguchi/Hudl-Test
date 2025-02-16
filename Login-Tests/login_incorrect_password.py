@@ -62,16 +62,16 @@ def test_login_button(driver):
         time.sleep(2)  # Wait for transition to the next step
 
         # Get password from environment variables
-        password = os.getenv("HUDL_WRONG_PASSWORD")
+        password2 = os.getenv("HUDL_PASSWORD_2")
         print("Password entered successfully.")  # Do NOT print password
 
         # Find and fill in the password field
-        password_input = driver.find_element(By.ID, "password")
-        password_input.send_keys(password)
+        password2_input = driver.find_element(By.ID, "password")
+        password2_input.send_keys(password2)
         print("Enter password")
 
         # Submit login form
-        password_input.send_keys(Keys.RETURN)
+        password2_input.send_keys(Keys.RETURN)
         time.sleep(5)  # Wait for login to complete
 
         # Verify password validation error is shown
