@@ -55,12 +55,7 @@ def test_login_button(driver):
 
         # Get email from environment variables
         email = os.getenv("HUDL_EMAIL")
-        print("Looking for HUDL_EMAIL...")
-        print("HUDL_EMAIL:", os.getenv("HUDL_EMAIL"))
         print(f"Using email: {email[:3]}********@****.com")  # Partial masking
-        # print(f"Email: {email}")
-        # if not email:
-           # raise ValueError("HUDL_EMAIL is not set in the environment variables.")
 
         # Find and fill in the email field
         email_input = driver.find_element(By.ID, "username")
@@ -71,14 +66,7 @@ def test_login_button(driver):
 
         # Get password from environment variables
         password = os.getenv("HUDL_PASSWORD")
-        # print("Looking for HUDL_PASSWORD...")
-        # print("HUDL_PASSWORD:", os.getenv("HUDL_PASSWORD"))
         print("Password entered successfully.")  # Do NOT print password
-
-
-        # print(f"Password: {password}")
-        # if not password:
-           # raise ValueError("HUDL_PASSWORD is not set in the environment variables.")
 
         # Find and fill in the password field
         password_input = driver.find_element(By.ID, "password")
@@ -89,20 +77,10 @@ def test_login_button(driver):
         password_input.send_keys(Keys.RETURN)
         time.sleep(5)  # Wait for login to complete
 
-        # Verify login is successful
-        # if "Feed" in driver.current_url:
-            # print("Test successful!")
-        # else:
-        # print("Test failed!")
-
     except Exception as e:
         print(f"An error occurred: {e}")
-
 
     finally:
         # Close the browser
         driver.quit()
 
-
-# Run the test (uncomment below if running directly as a script)
-# test_login_button()
