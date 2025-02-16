@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -21,9 +22,6 @@ def driver():
     driver.maximize_window()
     yield driver  # This keeps WebDriver open for the test
     driver.quit()  # Closes WebDriver after test completes
-
-# input("Press Enter to close the browser...")
-
 
 def test_login_button(driver):
     driver.get(HUDL_URL)
@@ -57,7 +55,7 @@ def test_login_button(driver):
         email = os.getenv("HUDL_EMAIL")
         print("Looking for HUDL_EMAIL...")
         print("HUDL_EMAIL:", os.getenv("HUDL_EMAIL"))
-        print(f"Using email: {email[:3]}********@****.com")  # Partial masking
+        print(f"Using email: {email[:3]}********@****.***")  # Partial masking
         # print(f"Email: {email}")
         # if not email:
         # raise ValueError("HUDL_EMAIL is not set in the environment variables.")
@@ -70,7 +68,7 @@ def test_login_button(driver):
         time.sleep(2)  # Wait for transition to the next step
 
         # Get password from environment variables
-        password = os.getenv("HUDL_PASSWORD")
+        password = os.getenv("HUDL_WRONG_PASSWORD")
         # print("Looking for HUDL_PASSWORD...")
         # print("HUDL_PASSWORD:", os.getenv("HUDL_PASSWORD"))
         print("Password entered successfully.")  # Do NOT print password
@@ -89,15 +87,17 @@ def test_login_button(driver):
         password_input.send_keys(Keys.RETURN)
         time.sleep(5)  # Wait for login to complete
 
-        # Verify login is successful
-        # if "Feed" in driver.current_url:
-        # print("Test successful!")
-        # else:
-        # print("Test failed!")
-
+        # Verify password validation error is shown
+        error_message = driver.find_element(By.CLASS_NAME, "ulp-input-error-message").text
+        if "email or password is incorrect" in error_message:
+            print("Login failed: Incorrect email or password. Test Successful.")
+        else:
+            print("Unknown login error. Please check test manually to verify:", error_message)
+    except NoSuchElementException:
+        # If no error message is found, assume test failed
+        print("Error: NoSuchElementException occurred. Test failed.")
     except Exception as e:
         print(f"An error occurred: {e}")
-
 
     finally:
         # Close the browser
@@ -106,93 +106,3 @@ def test_login_button(driver):
 
 # Run the test (uncomment below if running directly as a script)
 # test_login_button()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Set up the WebDriver (ensure you have the correct driver installed, e.g., chromedriver for Chrome)
-driver = webdriver.Chrome()
-
-def test_login_button():
-    try:
-        # Open the Hudl website
-        driver.get("https://www.hudl.com/en_gb/")
-        driver.maximize_window()
-
-        # Wait for the page to load
-        time.sleep(3)  # Consider using WebDriverWait instead
-
-        # Find the login button and click it and open the dropdown menu
-        login_button = driver.find_element(By.LINK_TEXT, "Log in")
-        login_button.click()
-        time.sleep(3)
-
-        # Find the dropdown menu and click "Hudl"
-        hudl_button = driver.find_element(By.LINK_TEXT, "Hudl")  # Replace with actual ID or locator
-        hudl_button.click()
-
-        # Wait for navigation
-        time.sleep(3)  # Adjust based on actual navigation speed
-
-        # Verify if redirected to the login page
-        # assert "login" in driver.current_url, "Login button did not navigate correctly"
-
-        # Get email from enviromnment variables
-        email = os.getenv("HUDL_EMAIL")
-        
-        # Find and fill in the email field
-        email_input = driver.find_element(By.ID, "username")
-        email_input.send_keys(email)
-        # email_input.send_keys(os.getenv("HUDL_EMAIL"))
-        email_input.send_keys(Keys.RETURN)
-        time.sleep(2) # Wait for transition to the next step
-
-        # Get password from enviromnment variables
-        password = os.getenv("HUDL_WRONG_PASSWORD")
-
-       # Find and fill in the password field
-        password_input = driver.find_element(By.ID, "password")
-        # password_input.send_keys(os.getenv("HUDL_WRONG_PASSWORD"))
-        password_input.send_keys(password)
-
-        # Submit login form
-        password_input.send_keys(Keys.RETURN)
-        time.sleep(5) # Wait for Login to complete
-
-        # Verify password validation error is shown
-        error_message - driver.find_element(By.CLASS_NAME, "ulp-input-error-message").text
-        if "email or password is incorrect" in error_message:
-            print("Login failed: Incorrect email or password. Test Successful.")
-                  else:
-                  print("Unknown login error. Please check test manually to verify:", error_message)
-                except NoSuchElementException:
-                # If no error message is found, assume test failed
-        if "dashboard" in driver.current_url:
-            print("Test Failed! Login Successful.")
-        else:
-            print("Login failed, but no error message found. Please check test manually to verify")                     
-
-        except Exception as e:
-            print(f"An error occured: {e}")
-
-        # Close the browser
-        finally:
-        driver.quit()
-
-# Run the test
-user_login()
