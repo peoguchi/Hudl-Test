@@ -1,14 +1,17 @@
 # Selenium Pytest Tests for Hudl Login
 
 This repository contains automated UI tests for Hudl login functionality using **Selenium WebDriver** and **Pytest**.
+The goal is to validate the login functionality under different scenarios to ensure the system behaves as expected.
 
 ## 📌 Project Overview
 These tests validate the login process for the Hudl platform, checking different scenarios such as:
 - Valid login credentials
 - Invalid login attempts
+- Resseting password
 - UI behavior on incorrect inputs
 
-Note: There are other test scenarios for the Login Page that have no tests written:
+# Notes 
+There are other test scenarios for the Login Page that are out of scope for this test set. Please see the attached "Test Plan For Hudl Login Page" to see full, prioritised list of tests.
 - Reset password - use the email password reset link
 - Reset password - use the reset link in the email and input incorrect password format
 - Login with newly reset password
@@ -17,6 +20,7 @@ Note: There are other test scenarios for the Login Page that have no tests writt
 	- login in with current password on one browser session
  	- Open another browser session, login and reset password. Login with new password
   	- Check previous browser session with old user credentials.
+ - Logging in with a locked account
 
 ## 🚀 Getting Started
 
