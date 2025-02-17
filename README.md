@@ -1,82 +1,83 @@
-# Hudl Test
- Repository for test automation
-This file contains details of the test script that will be run.
+# Selenium Pytest Tests for Hudl Login
 
+This repository contains automated UI tests for Hudl login functionality using **Selenium WebDriver** and **Pytest**.
 
-# Approach to Testing the Hudl.com Login Page
-The test script follows a structured automation testing approach using Selenium WebDriver and Pytest. The goal is to validate the login functionality under different scenarios to ensure the system behaves as expected.
+## 📌 Project Overview
+These tests validate the login process for the Hudl platform, checking different scenarios such as:
+- Valid login credentials
+- Invalid login attempts
+- UI behavior on incorrect inputs
 
+Note: There are other test scenarios for the Login Page that have no tests written:
+- Reset password - use the email password reset link
+- Reset password - use the reset link in the email and input incorrect password format
+- Login with newly reset password
+- After password reset, login with old password
+- Multiple browser sessions:
+	- login in with current password on one browser session
+ 	- Open another browser session, login and reset password. Login with new password
+  	- Check previous browser session with old user credentials.
 
-# Testing Strategy
-The script implements a data-driven testing approach where different sets of credentials (valid and invalid) are used to verify login behavior. It uses UI-based functional testing to interact with the login page.
+## 🚀 Getting Started
 
+### 1️⃣ Prerequisites
+Ensure you have the following installed:
+- Python (>=3.7)
+- Google Chrome & ChromeDriver
+- Selenium WebDriver
+- Pytest
 
-# Test Script Structure
-Setup and Teardown using Pytest Fixtures
-- A driver() fixture is used to initialize the Chrome WebDriver before each test and close it after execution.
-- This ensures proper resource management.
+### 2️⃣ Installation
+Clone this repository and install the required dependencies:
 
+```sh
+# Clone the repository
+git clone https://github.com/peoguchi/Hudl-Test.git
+cd Hudl-Test/Login-Tests
 
-# Test scenarios
-Valid Login: Ensures the user can log in with correct credentials.
-Invalid Login: Ensures an error message appears for incorrect credentials.
-Reset password: Ensures user is able to successfully reset their password and login with their new credentials.
-Reset password failure: Ensures if user enters incorrect credentials, password reset fails correctly.
-Reset password failure: Ensures user cannot set new password with incorrect password failure.  
-Reset password failure: Ensures user successfully resets their passwordd and is unable to login with old credentials.
+# Install dependencies
+pip install -r requirements.txt
+```
 
+### 3️⃣ Running the Tests
+Run all tests using Pytest:
 
-# Key Considerations
-- Why Selenium?
-	Selenium allows direct interaction with the web elements.
-	It provides cross-browser support.
-	Supports automation of real user flows.
-- Why Pytest?
-	Pytest provides a simple test structure.
-	Supports fixtures for setup and teardown.
-	Allows for parameterized testing (if needed in the future).
-- Handling Dynamic Elements
-	time.sleep() is used for simplicity, but explicit waits (WebDriverWait) can be used for dynamic elemen 
+```sh
+pytest
+```
+To run tests with detailed output:
+```sh
+pytest -v
+```
 
+Run tests in a headless browser mode:
+```sh
+pytest --headless
+```
 
-# Feature Enhancements
-- Implement explicit waits instead of time.sleep().
-- Use data-driven testing (via CSV, Excel, or Pytest parameters) for multiple test cases.
-- Extend tests to validate:
-	Login with a locked account.
-	Browser compatibility.
-- Logout test to ensure user is properly logged out and cannot access the dashboard after logging out
-- Logging in to multiple devices to verify how the user's current session is affected and handled.
-- SQL injections to ensure input fields are protected against malicious input.
+### 4️⃣ Test Structure
+- **`tests/`**: Contains test scripts.
+- **`pages/`**: Implements Page Object Model (POM) for UI elements.
+- **`conftest.py`**: Sets up test configurations.
+- **`pytest.ini`**: Contains Pytest configuration settings.
 
+### 5️⃣ Reporting
+To generate an HTML report:
+```sh
+pytest --html=report.html
+```
 
-# Reporting and logging
-- Generate Detailed Test Reports using Pytest HTML Reports.
-Integrate with Allure Reports for detailed logs and screenshots.
+## 🛠 Configuration
+Modify `config.py` to change test parameters, such as credentials and URLs.
 
+## 📝 Contribution Guidelines
+1. Fork the repository
+2. Create a feature branch
+3. Implement changes and add tests
+4. Submit a pull request
 
-# Risks
-- Functional Risks	
-	UI element changes: If Hudl updates the login page (e.g., changing the ID or XPath of input fields or buttons), the test may fail due to element not found errors.
-- Mitigation: 
-Use robust locators (like By.NAME or By.CSS_SELECTOR) and implement explicit waits to handle dynamic elements.
+## 📄 License
+This project is licensed under the MIT License.
 
-- Rate Limiting or Account Locking:
-	Multiple invalid login attempts may lock the account, preventing further tests.
-- Mitigation: Use a dummy test account and avoid excessive invalid login attempts in a short period.
-
-- Performance Risks
-	Slow page load or network issues causing the login page to load slowly, leading to timeout errors.
-- Mitigation: Use explicit waits (WebDriverWait) instead of time.sleep() to handle dynamic elements.
-
-Security Risks:
-- Exposing private data in the code by storing plain text credentials in the script.
-- Mitigation: use environment variables or secure vaults, AWS, which hashs out sensitive data.
-
-Test Maintainability Risks:
-- Hardcoded data makes the test difficult to maintain.
-- Mitigation: Use configuration files oor parameterised to manage test data
-
-
-Addressing these risks and integrating these considerations ensures that the Hudl.com login automation test remains robust, reliable, scalable and maintainable.
-
+---
+🚀 Happy Testing! 🚀
