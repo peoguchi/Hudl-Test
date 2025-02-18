@@ -24,7 +24,6 @@ def driver():
 
 # input("Press Enter to close the browser...")
 
-
 def test_login_button(driver):
     driver.get(HUDL_URL)
     try:
