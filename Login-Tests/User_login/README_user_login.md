@@ -5,9 +5,7 @@ This repository contains automated UI tests for Hudl login functionality using *
 ## 📌 Project Overview
 These tests validate the login process for the Hudl platform, checking different scenarios such as:
 - Successful login with valid credentials
-- Failed login attempts with invalid credentials
 - UI behavior on incorrect inputs
-- Edge cases such as empty fields and incorrect password formats
 
 ## 🚀 Getting Started
 
