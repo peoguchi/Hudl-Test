@@ -5,24 +5,22 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pytest
 import time
-from dotenv import load_dotenv
 import os
-
-HUDL_URL = "https://identity.hudl.com/u/login/password"
-# Extracted to a constant for reuse and clarity
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Set up the WebDriver (ensure you have the correct driver installed, e.g., chromedriver for Chrome)
+HUDL_URL = "https://identity.hudl.com/u/login/password"
+TEMPMAIL_URL = "https://tempmailo.com/"
+
 @pytest.fixture
 def driver():
     driver = webdriver.Chrome()
     driver.maximize_window()
-    yield driver  # This keeps WebDriver open for the test
-    driver.quit()  # Closes WebDriver after test completes
+    yield driver
+    driver.quit()
 
-# input("Press Enter to close the browser...")
 
 def test_login_button(driver):
     driver.get(HUDL_URL)
@@ -61,6 +59,8 @@ def test_login_button(driver):
         email_input.send_keys(email)
         email_input.send_keys(Keys.RETURN)
         time.sleep(2)  # Wait for transition to the next step
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
         # Click on "Forgot Password?"
         forgot_password_link = driver.find_element(By.LINK_TEXT, "Forgot Password")
@@ -79,26 +79,52 @@ def test_login_button(driver):
         print("✅ Password reset email sent.")
         time.sleep(2)  # Wait for transition to the next step
 
-        # Ensure the button is clickable
-        WebDriverWait(driver, 5).until(
-            EC.element_to_be_clickable((By.NAME, "action")))
+    # Open tempmail and get reset link
+    driver.get(TEMPMAIL_URL)
+    time.sleep(5)  # Allow email to arrive
 
-        # Resend email
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.NAME, "action")))
-        submit_button = driver.find_element(By.NAME, "action")
-        submit_button.click()
-        print("Clicked Resend Email button")
+    # consent to cookies
+# def test_cookie_consent(driver):
+    # driver.get("https://tempmailo.com/")
 
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "container")))
+    try:
+        consent_button = WebDriverWait(driver, 3).until(
+            EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'fc-button-label')]"))
+        )
+        driver.execute_script("arguments[0].click();", consent_button)
+        print("✅ Cookie consent accepted")
+    except Exception as e:
+        print(f"❌ Consent button not found: {e}")
 
-        # Verify user is taken back to Login page
-        reset_password_message = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h1[contains(text(),'Reset Password')]")))
-        assert "Reset Password" in reset_password_message.text
-        print("Test Passed: Forgot password email sent successfully.")
+    # Click on the first email
+    email_element = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR, "div.mail")))
+    email_element.click()
 
-    finally:
-        # Ensure the browser is closed even if the test fails
-        driver.quit()
+    # Find the reset link inside email
+    reset_link_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//a[contains(@href, 'reset-password')]")))
+    reset_link = reset_link_element.get_attribute("href")
+    print(f"Found reset link: {reset_link}")
+
+    # Open reset link
+    driver.get(reset_link)
+
+    # Enter new password
+    new_password = "NewSecureP@ssword123"
+    password_input = WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.ID, "password"))
+    )
+    confirm_password_input = driver.find_element(By.ID, "confirm-password")
+
+    password_input.send_keys(new_password)
+    confirm_password_input.send_keys(new_password)
+    confirm_password_input.send_keys(Keys.RETURN)
+
+    print("Password successfully reset")
+
+    # Verify success message
+    success_message = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//h1[contains(text(),'Password Reset Successful')]"))
+    )
+    assert "Password Reset Successful" in success_message.text

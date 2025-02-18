@@ -5,11 +5,11 @@ This repository contains automated UI tests for Hudl password reset functionalit
 ## 📌 Project Overview
 These tests validate the password reset functionality for the Hudl platform, checking different scenarios such as:
 - Requesting a password reset with a registered email
-- Handling password reset requests with unregistered emails
+- Using the reset link in email to change password
 - Validating error messages and success messages
 - UI behavior upon password reset request submission
 
-Note: This test does not include validating the password reset link sent by email.
+Note: This test does not include resetting password with incorrect email credentials as this is out of scope but is listed as a feature enhancement for the test.
 
 ## 🚀 Getting Started
 
